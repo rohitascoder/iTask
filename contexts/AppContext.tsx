@@ -23,7 +23,7 @@ interface AppContextType {
     theme: Theme;
     toggleTheme: () => void;
     logout: () => void;
-    login: (userId?: number) => void;
+    login: (username: string, password: string) => Promise<void>;
     searchTerm: string;
     setSearchTerm: (term: string) => void;
 }
@@ -46,7 +46,7 @@ export const AppContext = createContext<AppContextType>({
     theme: 'light',
     toggleTheme: () => {},
     logout: () => {},
-    login: () => {},
+    login: async () => {},
     searchTerm: '',
     setSearchTerm: () => {},
 });
@@ -92,14 +92,6 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             setTasks(tasksData);
             setTeams(teamsData);
             setPaths(pathsData);
-            
-            const initialUser = usersData.find(u => u.role === UserRole.ADMIN);
-            if(initialUser) {
-                setCurrentUser(initialUser);
-            } else if (usersData.length > 0) {
-                setCurrentUser(usersData[0]);
-            }
-            
         } catch (err) {
             setError('Failed to load data.');
             console.error(err);
@@ -126,12 +118,25 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         }
     };
     
-    const login = (userId: number = 1) => { // Default to admin user
-        const userToLogin = users.find(u => u.id === userId);
-        if(userToLogin) {
-            setCurrentUser(userToLogin);
-            navigate('/dashboard');
+    const login = async (username: string, password: string): Promise<void> => {
+        // Note: This is a mock authentication. In a real app, this would be an API call.
+        const userToLogin = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+
+        if (!userToLogin) {
+            throw new Error('Invalid username or password.');
         }
+
+        // Special check for the admin user as requested.
+        if (userToLogin.role === UserRole.ADMIN) {
+            if (password !== 'admin') {
+                throw new Error('Invalid username or password.');
+            }
+        }
+        // For other users, we can assume any password works for this simulation.
+
+        setCurrentUser(userToLogin);
+        navigate('/dashboard');
+        return Promise.resolve();
     };
 
     const logout = () => {
