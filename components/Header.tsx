@@ -1,3 +1,4 @@
+
 import React, { useContext } from 'react';
 import { AppContext } from '../contexts/AppContext';
 import { UserRole } from '../types';
@@ -9,10 +10,10 @@ interface HeaderProps {
 
 const RoleBadge: React.FC<{ role: UserRole }> = ({ role }) => {
     const roleColors: Record<UserRole, string> = {
-        [UserRole.ADMIN]: 'bg-red-100 text-red-700',
-        [UserRole.MANAGER]: 'bg-orange-100 text-orange-700',
-        [UserRole.TEAM_LEADER]: 'bg-blue-100 text-blue-700',
-        [UserRole.TEAM_MEMBER]: 'bg-green-100 text-green-700',
+        [UserRole.ADMIN]: 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300',
+        [UserRole.MANAGER]: 'bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300',
+        [UserRole.TEAM_LEADER]: 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
+        [UserRole.TEAM_MEMBER]: 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300',
     };
 
     return (
@@ -23,14 +24,14 @@ const RoleBadge: React.FC<{ role: UserRole }> = ({ role }) => {
 };
 
 const Header: React.FC<HeaderProps> = ({ setSidebarOpen }) => {
-    const { currentUser, switchUser } = useContext(AppContext);
+    const { currentUser, switchUser, searchTerm, setSearchTerm } = useContext(AppContext);
 
     return (
-        <header className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
+        <header className="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center">
                 <button
                     onClick={() => setSidebarOpen(true)}
-                    className="text-gray-500 focus:outline-none lg:hidden"
+                    className="text-gray-500 dark:text-gray-400 focus:outline-none lg:hidden"
                 >
                     <svg
                         className="w-6 h-6"
@@ -61,21 +62,23 @@ const Header: React.FC<HeaderProps> = ({ setSidebarOpen }) => {
                     </span>
 
                     <input
-                        className="w-32 pl-10 pr-4 rounded-md form-input sm:w-64 focus:border-primary-500 bg-gray-100 border-transparent text-sm py-2"
+                        className="w-32 pl-10 pr-4 rounded-md form-input sm:w-64 focus:border-primary-500 bg-gray-100 dark:bg-gray-700 border-transparent text-sm py-2 dark:text-gray-200"
                         type="text"
-                        placeholder="Search"
+                        placeholder="Search Tasks"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
             </div>
 
             <div className="flex items-center space-x-4">
                  <div className="flex items-center space-x-2">
-                    <label htmlFor="role-switcher" className="text-sm font-medium hidden sm:block text-gray-600">Simulate Role:</label>
+                    <label htmlFor="role-switcher" className="text-sm font-medium hidden sm:block text-gray-600 dark:text-gray-300">Simulate Role:</label>
                     <select
                         id="role-switcher"
                         value={currentUser?.id}
                         onChange={(e) => switchUser(Number(e.target.value))}
-                        className="text-sm rounded-md bg-gray-100 border-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 py-2 pl-3 pr-8"
+                        className="text-sm rounded-md bg-gray-100 dark:bg-gray-700 dark:text-gray-200 border-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 py-2 pl-3 pr-8"
                     >
                         <option value="1">Admin</option>
                         <option value="2">Manager</option>

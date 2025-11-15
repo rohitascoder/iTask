@@ -7,7 +7,7 @@ import UsersView from './views/UsersView';
 import TeamsView from './views/TeamsView';
 import PathsView from './views/PathsView';
 import SettingsView from './views/SettingsView';
-import AccessDenied from './components/AccessDenied';
+import LoggedOutView from './views/LoggedOutView';
 
 const CurrentViewRenderer: React.FC = () => {
   const { currentView } = useContext(AppContext);
@@ -30,12 +30,25 @@ const CurrentViewRenderer: React.FC = () => {
   }
 };
 
+const AppContent: React.FC = () => {
+  const { currentUser } = useContext(AppContext);
+
+  if (!currentUser) {
+    return <LoggedOutView />;
+  }
+
+  return (
+    <Layout>
+      <CurrentViewRenderer />
+    </Layout>
+  );
+};
+
+
 function App() {
   return (
     <AppContextProvider>
-      <Layout>
-        <CurrentViewRenderer />
-      </Layout>
+      <AppContent />
     </AppContextProvider>
   );
 }

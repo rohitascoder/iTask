@@ -43,6 +43,22 @@ const ChevronDownIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
     </svg>
 );
+const SunIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+    </svg>
+);
+const MoonIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+    </svg>
+);
+const LogoutIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+  </svg>
+);
+
 
 interface NavItem {
   to?: View;
@@ -53,7 +69,7 @@ interface NavItem {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
-  const { currentUser, currentView, navigate } = useContext(AppContext);
+  const { currentUser, currentView, navigate, theme, toggleTheme, logout } = useContext(AppContext);
   const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
   const role = currentUser?.role;
 
@@ -64,10 +80,10 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
     }
   }, [currentView]);
 
-  const navLinkClasses = "flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors duration-200 w-full text-left";
+  const navLinkClasses = "flex items-center px-4 py-2.5 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-primary-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 w-full text-left";
   const activeLinkClasses = "bg-primary-500 text-white hover:bg-primary-500 hover:text-white";
-  const subNavLinkClasses = "flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors duration-200 w-full text-left";
-  const activeSubNavLinkClasses = "bg-primary-50 text-primary-600 font-semibold";
+  const subNavLinkClasses = "flex items-center px-4 py-2 text-sm text-gray-600 dark:text-gray-300 rounded-lg hover:bg-primary-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 w-full text-left";
+  const activeSubNavLinkClasses = "bg-primary-50 dark:bg-gray-700 text-primary-600 dark:text-primary-400 font-semibold";
 
   const navItems: NavItem[] = [
     { to: '/dashboard', label: 'Dashboard', icon: HomeIcon, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.TEAM_LEADER, UserRole.TEAM_MEMBER] },
@@ -111,60 +127,81 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
       ></div>
 
       <div
-        className={`fixed inset-y-0 left-0 z-30 w-64 transform bg-white shadow-lg transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0 border-r border-gray-200 ${
+        className={`fixed inset-y-0 left-0 z-30 w-64 transform bg-white dark:bg-gray-800 shadow-lg transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0 border-r border-gray-200 dark:border-gray-700 flex flex-col ${
           sidebarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'
         }`}
       >
-        <div className="flex items-center justify-center h-20 border-b border-gray-200">
+        <div className="flex items-center justify-center h-20 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div className="flex items-center">
             <svg className="h-8 w-8 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span className="ml-2 text-xl font-semibold text-gray-800">Gemini Tasks</span>
+            <span className="ml-2 text-xl font-semibold text-gray-800 dark:text-gray-100">Gemini Tasks</span>
           </div>
         </div>
-
-        <nav className="mt-4 px-4 space-y-2">
-          {visibleNavItems.map((item) => (
-            <div key={item.label}>
-                {item.children ? (
-                    <>
+        
+        <div className="flex-1 overflow-y-auto">
+            <nav className="mt-4 px-4 space-y-2">
+            {visibleNavItems.map((item) => (
+                <div key={item.label}>
+                    {item.children ? (
+                        <>
+                            <button
+                            onClick={() => setSettingsMenuOpen(!settingsMenuOpen)}
+                            className={`${navLinkClasses} ${isPathActive('/settings', true) ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-gray-700' : ''} justify-between`}
+                            >
+                                <div className="flex items-center">
+                                    <item.icon className="h-5 w-5" />
+                                    <span className="mx-4 font-medium">{item.label}</span>
+                                </div>
+                                <ChevronDownIcon className={`w-5 h-5 transition-transform ${settingsMenuOpen ? 'rotate-180' : ''}`} />
+                            </button>
+                            {settingsMenuOpen && (
+                                <div className="pl-8 pt-2 space-y-1">
+                                    {item.children.filter(child => role && child.roles.includes(role)).map(child => (
+                                        <button
+                                            key={child.to}
+                                            onClick={() => handleNavigate(child.to)}
+                                            className={`${subNavLinkClasses} ${isPathActive(child.to) ? activeSubNavLinkClasses : ''}`}
+                                        >
+                                            <span className="font-medium">{child.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </>
+                    ) : (
                         <button
-                          onClick={() => setSettingsMenuOpen(!settingsMenuOpen)}
-                          className={`${navLinkClasses} ${isPathActive('/settings', true) ? 'text-primary-600 bg-primary-50' : ''} justify-between`}
+                        onClick={() => item.to && handleNavigate(item.to)}
+                        className={`${navLinkClasses} ${isPathActive(item.to || '') ? activeLinkClasses : ''}`}
                         >
-                            <div className="flex items-center">
-                                <item.icon className="h-5 w-5" />
-                                <span className="mx-4 font-medium">{item.label}</span>
-                            </div>
-                            <ChevronDownIcon className={`w-5 h-5 transition-transform ${settingsMenuOpen ? 'rotate-180' : ''}`} />
+                        <item.icon className="h-5 w-5" />
+                        <span className="mx-4 font-medium">{item.label}</span>
                         </button>
-                        {settingsMenuOpen && (
-                            <div className="pl-8 pt-2 space-y-1">
-                                {item.children.filter(child => role && child.roles.includes(role)).map(child => (
-                                    <button
-                                        key={child.to}
-                                        onClick={() => handleNavigate(child.to)}
-                                        className={`${subNavLinkClasses} ${isPathActive(child.to) ? activeSubNavLinkClasses : ''}`}
-                                    >
-                                        <span className="font-medium">{child.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </>
-                ) : (
-                    <button
-                      onClick={() => item.to && handleNavigate(item.to)}
-                      className={`${navLinkClasses} ${isPathActive(item.to || '') ? activeLinkClasses : ''}`}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      <span className="mx-4 font-medium">{item.label}</span>
-                    </button>
-                )}
-            </div>
-          ))}
-        </nav>
+                    )}
+                </div>
+            ))}
+            </nav>
+        </div>
+
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+             <div className="flex items-center justify-between">
+                <button
+                    onClick={toggleTheme}
+                    className="flex items-center justify-center w-10 h-10 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:focus:ring-offset-gray-800"
+                    aria-label="Toggle theme"
+                >
+                    {theme === 'light' ? <MoonIcon className="h-6 w-6" /> : <SunIcon className="h-6 w-6" />}
+                </button>
+                <button 
+                  onClick={logout}
+                  className="flex items-center w-full ml-2 px-4 py-2 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <LogoutIcon className="h-5 w-5" />
+                  <span className="mx-4 font-medium">Logout</span>
+                </button>
+             </div>
+        </div>
       </div>
     </>
   );

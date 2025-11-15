@@ -1,4 +1,3 @@
-
 import { USERS, TEAMS, TASKS, PATHS } from '../constants';
 import { User, Team, Task, SystemPath } from '../types';
 
@@ -54,6 +53,28 @@ export const api = {
         };
         tasks.push(task);
         return task;
+    },
+
+    updateTask: async (taskId: number, updates: Partial<Omit<Task, 'id'>>): Promise<Task> => {
+        await delay(300);
+        let updatedTask: Task | undefined;
+        tasks = tasks.map(task => {
+            if (task.id === taskId) {
+                updatedTask = { ...task, ...updates };
+                return updatedTask;
+            }
+            return task;
+        });
+        if (!updatedTask) {
+            throw new Error('Task not found');
+        }
+        return updatedTask;
+    },
+    
+    deleteTask: async (taskId: number): Promise<{ id: number }> => {
+        await delay(300);
+        tasks = tasks.filter(task => task.id !== taskId);
+        return { id: taskId };
     },
 
     getTeams: async (): Promise<Team[]> => {

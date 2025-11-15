@@ -8,12 +8,12 @@ const LockIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 
 const AccessDenied: React.FC = () => (
     <div className="flex items-center justify-center h-full p-4">
-        <div className="bg-white rounded-lg shadow border border-gray-200 p-8 text-center max-w-md mx-auto">
-            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                <LockIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-8 text-center max-w-md mx-auto">
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/50">
+                <LockIcon className="h-6 w-6 text-red-600 dark:text-red-400" aria-hidden="true" />
             </div>
-            <h2 className="mt-4 text-2xl font-bold text-gray-800">Access Denied</h2>
-            <p className="mt-2 text-gray-600">You do not have the required permissions to view this page.</p>
+            <h2 className="mt-4 text-2xl font-bold text-gray-800 dark:text-gray-100">Access Denied</h2>
+            <p className="mt-2 text-gray-600 dark:text-gray-300">You do not have the required permissions to view this page.</p>
         </div>
     </div>
 );

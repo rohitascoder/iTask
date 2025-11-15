@@ -235,11 +235,11 @@ if __name__ == '__main__':
 
     return (
         <div className="container mx-auto">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Settings</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Settings</h1>
 
-            <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-                <h2 className="text-xl font-semibold mb-2 text-gray-800">Backend Generation</h2>
-                <p className="text-gray-600 mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+                <h2 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100">Backend Generation</h2>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
                     Generate a runnable Python/Flask backend script based on the current application data. This provides a complete server-side implementation with a pre-populated database.
                 </p>
                 <button 
@@ -262,15 +262,15 @@ if __name__ == '__main__':
 
                 {generatedCode && (
                     <div className="mt-6 relative">
-                         <h3 className="text-lg font-semibold mb-2 text-gray-800">Generated: app.py</h3>
+                         <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">Generated: app.py</h3>
                         <button
                             onClick={handleCopyCode}
-                            className="absolute top-0 right-0 mt-2 mr-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold py-1 px-2 rounded"
+                            className="absolute top-0 right-0 mt-2 mr-2 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200 text-xs font-bold py-1 px-2 rounded"
                         >
                            {copySuccess ? 'Copied!' : 'Copy'}
                         </button>
-                        <pre className="bg-gray-50 rounded-md p-4 overflow-x-auto border border-gray-200 max-h-[60vh]">
-                            <code className="text-sm text-gray-800 font-mono">
+                        <pre className="bg-gray-50 dark:bg-black/25 rounded-md p-4 overflow-x-auto border border-gray-200 dark:border-gray-700 max-h-[60vh]">
+                            <code className="text-sm text-gray-800 dark:text-gray-200 font-mono">
                                 {generatedCode}
                             </code>
                         </pre>

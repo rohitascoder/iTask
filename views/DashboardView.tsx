@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../contexts/AppContext';
 import { TaskStatus, UserRole } from '../types';
+import TaskStatusPieChart from '../components/TaskStatusPieChart';
 
 const StatCard: React.FC<{ title: string; value: string | number; icon: React.ReactNode; iconBgColor: string }> = ({ title, value, icon, iconBgColor }) => (
-    <div className="bg-white rounded-lg shadow border border-gray-200 p-6 flex items-center space-x-4">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6 flex items-center space-x-4">
         <div className={`rounded-full p-3 ${iconBgColor}`}>
             {icon}
         </div>
         <div>
-            <p className="text-sm font-medium text-gray-500">{title}</p>
-            <p className="text-2xl font-bold text-gray-800">{value}</p>
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</p>
+            <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{value}</p>
         </div>
     </div>
 );
@@ -57,31 +58,37 @@ const DashboardView: React.FC = () => {
 
     return (
         <div className="container mx-auto">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Welcome, {currentUser?.username}!</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Welcome, {currentUser?.username}!</h1>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <StatCard title="Active Users" value={users.filter(u => u.status === 'active').length} icon={<UsersIcon className="w-8 h-8 text-blue-600"/>} iconBgColor="bg-blue-100" />
-                <StatCard title="Pending Tasks" value={pendingTasks} icon={<TaskIcon className="w-8 h-8 text-orange-600"/>} iconBgColor="bg-orange-100"/>
-                <StatCard title="Completed Tasks" value={completedTasks} icon={<CheckCircleIcon className="w-8 h-8 text-green-600"/>} iconBgColor="bg-green-100"/>
+                <StatCard title="Active Users" value={users.filter(u => u.status === 'active').length} icon={<UsersIcon className="w-8 h-8 text-blue-600"/>} iconBgColor="bg-blue-100 dark:bg-blue-900/50" />
+                <StatCard title="Pending Tasks" value={pendingTasks} icon={<TaskIcon className="w-8 h-8 text-orange-600"/>} iconBgColor="bg-orange-100 dark:bg-orange-900/50"/>
+                <StatCard title="Completed Tasks" value={completedTasks} icon={<CheckCircleIcon className="w-8 h-8 text-green-600"/>} iconBgColor="bg-green-100 dark:bg-green-900/50"/>
             </div>
 
-            <div className="mt-8 bg-white rounded-lg shadow border border-gray-200 p-6">
-                 <h2 className="text-xl font-semibold mb-4 text-gray-800">Your Recent Activity</h2>
-                 <ul className="divide-y divide-gray-200">
-                    {visibleTasks.slice(0, 5).map(task => (
-                        <li key={task.id} className="py-4">
-                            <div className="flex space-x-3">
-                                <div className="flex-1 space-y-1">
-                                    <div className="flex items-center justify-between">
-                                        <h3 className="text-sm font-medium text-gray-900">{task.title}</h3>
-                                        <p className="text-sm text-gray-500">{new Date(task.createdAt).toLocaleDateString()}</p>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-8">
+                <div className="lg:col-span-3 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+                    <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Your Recent Activity</h2>
+                    <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {visibleTasks.slice(0, 5).map(task => (
+                            <li key={task.id} className="py-4">
+                                <div className="flex space-x-3">
+                                    <div className="flex-1 space-y-1">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-sm font-medium text-gray-900 dark:text-gray-50">{task.title}</h3>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">{new Date(task.createdAt).toLocaleDateString()}</p>
+                                        </div>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">{task.description}</p>
                                     </div>
-                                    <p className="text-sm text-gray-500">{task.description}</p>
                                 </div>
-                            </div>
-                        </li>
-                    ))}
-                 </ul>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+                     <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Task Status Overview</h2>
+                     <TaskStatusPieChart tasks={visibleTasks} />
+                </div>
             </div>
         </div>
     );

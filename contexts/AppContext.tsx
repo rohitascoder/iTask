@@ -1,9 +1,9 @@
-
 import React, { createContext, useState, useEffect } from 'react';
 import { User, Task, Team, SystemPath, UserRole } from '../types';
 import { api } from '../services/mockApi';
 
 export type View = '/dashboard' | '/tasks' | '/users' | '/teams' | '/settings' | '/settings/paths';
+export type Theme = 'light' | 'dark';
 
 interface AppContextType {
     currentUser: User | null;
@@ -18,6 +18,14 @@ interface AppContextType {
     navigate: (view: View) => void;
     addTask: (task: Task) => void;
     addUser: (user: User) => void;
+    updateTask: (task: Task) => void;
+    deleteTask: (taskId: number) => void;
+    theme: Theme;
+    toggleTheme: () => void;
+    logout: () => void;
+    login: (userId?: number) => void;
+    searchTerm: string;
+    setSearchTerm: (term: string) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -33,6 +41,14 @@ export const AppContext = createContext<AppContextType>({
     navigate: () => {},
     addTask: () => {},
     addUser: () => {},
+    updateTask: () => {},
+    deleteTask: () => {},
+    theme: 'light',
+    toggleTheme: () => {},
+    logout: () => {},
+    login: () => {},
+    searchTerm: '',
+    setSearchTerm: () => {},
 });
 
 export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -44,6 +60,24 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [currentView, setCurrentView] = useState<View>('/dashboard');
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [theme, setTheme] = useState<Theme>(() => {
+        const savedTheme = localStorage.getItem('theme') as Theme;
+        return savedTheme || 'light';
+    });
+
+     useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    };
 
     const fetchData = async () => {
         try {
@@ -59,8 +93,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             setTeams(teamsData);
             setPaths(pathsData);
             
-            // Set initial user (Team Member)
-            const initialUser = usersData.find(u => u.role === UserRole.TEAM_MEMBER);
+            const initialUser = usersData.find(u => u.role === UserRole.ADMIN);
             if(initialUser) {
                 setCurrentUser(initialUser);
             } else if (usersData.length > 0) {
@@ -79,11 +112,30 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         fetchData();
     }, []);
 
+    // Clear search term when navigating away from the tasks view
+    useEffect(() => {
+        if (currentView !== '/tasks') {
+            setSearchTerm('');
+        }
+    }, [currentView]);
+
     const switchUser = (userId: number) => {
         const user = users.find(u => u.id === userId);
         if (user) {
             setCurrentUser(user);
         }
+    };
+    
+    const login = (userId: number = 1) => { // Default to admin user
+        const userToLogin = users.find(u => u.id === userId);
+        if(userToLogin) {
+            setCurrentUser(userToLogin);
+            navigate('/dashboard');
+        }
+    };
+
+    const logout = () => {
+        setCurrentUser(null);
     };
 
     const navigate = (view: View) => {
@@ -96,6 +148,16 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
     const addUser = (user: User) => {
         setUsers(prevUsers => [...prevUsers, user]);
+    };
+
+    const updateTask = (updatedTask: Task) => {
+        setTasks(prevTasks => prevTasks.map(task => 
+            task.id === updatedTask.id ? updatedTask : task
+        ));
+    };
+
+    const deleteTask = (taskId: number) => {
+        setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
     };
 
     const value = {
@@ -111,6 +173,14 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         navigate,
         addTask,
         addUser,
+        updateTask,
+        deleteTask,
+        theme,
+        toggleTheme,
+        logout,
+        login,
+        searchTerm,
+        setSearchTerm,
     };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

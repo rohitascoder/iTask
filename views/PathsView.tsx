@@ -47,9 +47,9 @@ const FileUploadPathItem: React.FC<{ name: string }> = ({ name }) => {
   return (
     <li className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between">
       <div>
-        <h3 className="font-semibold text-lg text-gray-800">{name}</h3>
+        <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">{name}</h3>
         {selectedFile && (
-           <p className="text-gray-500 font-mono text-sm mt-1 truncate max-w-xs" title={selectedFile.name}>
+           <p className="text-gray-500 dark:text-gray-400 font-mono text-sm mt-1 truncate max-w-xs" title={selectedFile.name}>
              Selected: {selectedFile.name}
            </p>
         )}
@@ -64,7 +64,7 @@ const FileUploadPathItem: React.FC<{ name: string }> = ({ name }) => {
         />
         <button 
             onClick={handleBrowseClick} 
-            className="text-sm font-medium text-primary-600 hover:text-primary-800 bg-primary-100 hover:bg-primary-200 px-4 py-2 rounded-md transition-colors"
+            className="text-sm font-medium text-primary-600 hover:text-primary-800 bg-primary-100 hover:bg-primary-200 dark:bg-primary-900/50 dark:hover:bg-primary-900/80 dark:text-primary-300 px-4 py-2 rounded-md transition-colors"
         >
           Browse
         </button>
@@ -103,10 +103,10 @@ const PathsView: React.FC = () => {
 
     return (
         <div className="container mx-auto">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">System Paths</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">System Paths</h1>
             
-            <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
-                <ul className="divide-y divide-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                     {paths.map((p: SystemPath) => {
                         if (uploadablePaths.includes(p.name)) {
                            return <FileUploadPathItem key={p.id} name={p.name} />;
@@ -114,18 +114,18 @@ const PathsView: React.FC = () => {
                         return (
                             <li key={p.id} className="p-4 flex items-center justify-between">
                                <div>
-                                 <h3 className="font-semibold text-lg text-gray-800">{p.name}</h3>
-                                 <p className="text-gray-500 font-mono text-sm">{p.path}</p>
+                                 <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">{p.name}</h3>
+                                 <p className="text-gray-500 dark:text-gray-400 font-mono text-sm">{p.path}</p>
                                </div>
                                <button 
                                  onClick={() => handleCopy(p.path, p.id)}
-                                 className="p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+                                 className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
                                  aria-label={`Copy path for ${p.name}`}
                                 >
                                     {copiedPathId === p.id ? (
                                         <CheckIcon className="w-5 h-5 text-green-500" />
                                     ) : (
-                                        <CopyIcon className="w-5 h-5 text-gray-500" />
+                                        <CopyIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                     )}
                                </button>
                             </li>
