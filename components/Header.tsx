@@ -1,30 +1,14 @@
 
 import React, { useContext } from 'react';
 import { AppContext } from '../contexts/AppContext';
-import { UserRole } from '../types';
 
 interface HeaderProps {
     sidebarOpen: boolean;
     setSidebarOpen: (open: boolean) => void;
 }
 
-const RoleBadge: React.FC<{ role: UserRole }> = ({ role }) => {
-    const roleColors: Record<UserRole, string> = {
-        [UserRole.ADMIN]: 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300',
-        [UserRole.MANAGER]: 'bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300',
-        [UserRole.TEAM_LEADER]: 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
-        [UserRole.TEAM_MEMBER]: 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300',
-    };
-
-    return (
-        <span className={`px-2.5 py-1 text-xs font-medium leading-5 rounded-full ${roleColors[role]}`}>
-            {role}
-        </span>
-    );
-};
-
 const Header: React.FC<HeaderProps> = ({ setSidebarOpen }) => {
-    const { currentUser, switchUser, searchTerm, setSearchTerm } = useContext(AppContext);
+    const { searchTerm, setSearchTerm } = useContext(AppContext);
 
     return (
         <header className="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -72,26 +56,7 @@ const Header: React.FC<HeaderProps> = ({ setSidebarOpen }) => {
             </div>
 
             <div className="flex items-center space-x-4">
-                 <div className="flex items-center space-x-2">
-                    <label htmlFor="role-switcher" className="text-sm font-medium hidden sm:block text-gray-600 dark:text-gray-300">Simulate Role:</label>
-                    <select
-                        id="role-switcher"
-                        value={currentUser?.id}
-                        onChange={(e) => switchUser(Number(e.target.value))}
-                        className="text-sm rounded-md bg-gray-100 dark:bg-gray-700 dark:text-gray-200 border-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 py-2 pl-3 pr-8"
-                    >
-                        <option value="1">Admin</option>
-                        <option value="2">Manager</option>
-                        <option value="3">Team Leader</option>
-                        <option value="4">Team Member</option>
-                    </select>
-                </div>
-                {currentUser && (
-                    <div className="flex items-center">
-                        <span className="font-medium mr-3 hidden md:block">{currentUser.username}</span>
-                        <RoleBadge role={currentUser.role} />
-                    </div>
-                )}
+                {/* User info can be added here later */}
             </div>
         </header>
     );

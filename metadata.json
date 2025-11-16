@@ -1,5 +1,5 @@
 {
-  "name": "Gemini Task Manager",
-  "description": "A comprehensive task management system with role-based access control, team management, and system path configuration. Built with React, TypeScript, and Tailwind CSS, this application provides a modern and responsive user interface for managing organizational workflows.",
+  "name": "iTask",
+  "description": "A full-stack task management application with a React frontend and a Flask/PostgreSQL backend.",
   "requestFramePermissions": []
 }
