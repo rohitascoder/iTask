@@ -1,12 +1,11 @@
 # iTask Full-Stack Application
 
-This is a full-stack task management application with a React frontend and a Flask/PostgreSQL backend.
+This is a full-stack task management application with a React frontend and a Flask/SQLite backend.
 
-## Backend Setup (Flask & PostgreSQL)
+## Backend Setup (Flask & SQLite)
 
 ### 1. Prerequisites
 - Python 3.8+ and `pip`
-- PostgreSQL server installed and running
 
 ### 2. Setup Instructions
 
@@ -37,22 +36,18 @@ This is a full-stack task management application with a React frontend and a Fla
         ```bash
         cp .env.example .env
         ```
-    *   Open the `.env` file and edit the variables:
-        *   `DATABASE_URL`: Set this to your PostgreSQL connection string.
-            *   *Example:* `postgresql://your_db_user:your_db_password@localhost:5432/itask_db`
-            *   You may need to create the `itask_db` database in PostgreSQL first.
-        *   `JWT_SECRET_KEY`: Change this to a long, random, and secret string.
+    *   Open the `.env` file and edit the variables. The `DATABASE_URL` is already set for SQLite. You should change `JWT_SECRET_KEY` to a long, random, and secret string.
 
 5.  **Initialize and Run Database Migrations:**
-    *   Initialize the Alembic migration environment (only needs to be run once per project):
+    *   If you are starting a fresh project, initialize the Alembic migration environment (only needs to be run once):
         ```bash
         flask db init
         ```
-    *   Create the initial migration script. This will detect the User and Task models, including the unique constraint on the username:
+    *   Create the initial migration script. This will detect the User and Task models:
         ```bash
         flask db migrate -m "Initial migration"
         ```
-    *   Apply the migrations to create the tables in your database:
+    *   Apply the migrations to create the tables in your `itask.db` SQLite file:
         ```bash
         flask db upgrade
         ```
@@ -67,7 +62,7 @@ This is a full-stack task management application with a React frontend and a Fla
     ```bash
     flask run --port=5001
     ```
-    The backend API will now be running at `http://127.0.0.1:5001`.
+    The backend API will now be running at `http://127.0.0.1:5001`. The `itask.db` file will be created in the `backend` directory.
 
 ## Frontend Setup (React)
 
